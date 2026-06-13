@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rolantiro // Rekam Medis Files</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&family=VT323&display=swap');
+
+  :root{
+    --bg: #0a0a0a;
+    --pink: #ff2d55;
+    --purple: #800020;
+    --cyan: #ff5c7a;
+    --lime: #ff2d55;
+    --ink: #f5e6e6;
+    --card: #1a0a0d;
+  }
+
+  *{margin:0; padding:0; box-sizing:border-box;}
+
+  body{
+    font-family:'Space Grotesk', sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(128,0,32,.45), transparent 35%),
+      radial-gradient(circle at 85% 75%, rgba(255,45,85,.25), transparent 35%),
+      repeating-linear-gradient(45deg, rgba(255,255,255,.03) 0 2px, transparent 2px 40px);
+    color: var(--ink);
+    overflow-x:hidden;
+  }
+
+  ::selection{background:var(--pink); color:var(--bg);}
+
+  /* === NAV === */
+  nav{
+    position:sticky; top:0; z-index:50;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 6vw;
+    background: rgba(10,10,10,.7);
+    backdrop-filter: blur(10px);
+    border-bottom:3px solid var(--pink);
+  }
+  .logo{
+    font-family:'Orbitron', sans-serif; font-weight:900;
+    font-size:1.4rem; letter-spacing:1px;
+    color:var(--ink);
+  }
+  .logo span{color:var(--pink);}
+  nav ul{list-style:none; display:flex; gap:28px;}
+  nav a{
+    text-decoration:none; color:var(--ink); font-weight:700;
+    font-size:.85rem; letter-spacing:1px; text-transform:uppercase;
+    position:relative;
+  }
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:-6px; width:0; height:3px;
+    background:var(--pink); transition:width .25s;
+  }
+  nav a:hover::after{width:100%;}
+
+  /* === HERO === */
+  .hero{
+    min-height:90vh; display:flex; flex-direction:column; justify-content:center;
+    padding:8vh 6vw; position:relative;
+  }
+  .marquee{
+    font-family:'VT323', monospace; font-size:1.1rem; letter-spacing:3px;
+    color:var(--ink); background:var(--lime);
+    border:2px solid var(--ink); border-radius:999px;
+    padding:6px 18px; display:inline-block; transform:rotate(-2deg);
+    margin-bottom:30px; width:fit-content;
+  }
+  .hero h1{
+    font-family:'Orbitron', sans-serif; font-weight:900;
+    font-size:clamp(2.8rem, 9vw, 7rem);
+    line-height:1;
+    text-transform:uppercase;
+    background: linear-gradient(135deg, var(--pink), var(--purple) 50%, var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-text-stroke:2px var(--ink);
+    text-shadow: 4px 4px 0 var(--purple);
+  }
+  .hero h2{
+    font-family:'Orbitron', sans-serif; font-weight:700;
+    font-size:clamp(1rem, 2.5vw, 1.6rem);
+    margin-top:14px; letter-spacing:2px;
+    color:var(--pink);
+  }
+  .hero p.tag{
+    margin-top:24px; max-width:560px; font-size:1rem; line-height:1.6;
+    color:#d9b8c0;
+  }
+  .badge-row{display:flex; gap:14px; margin-top:36px; flex-wrap:wrap;}
+  .badge{
+    font-family:'VT323', monospace; font-size:1.05rem;
+    border:2px solid var(--pink); border-radius:8px;
+    padding:8px 16px; background:var(--card); color:var(--ink);
+    box-shadow:4px 4px 0 var(--purple);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .badge:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--pink);}
+
+  /* floating stickers */
+  .sticker{
+    position:absolute; font-family:'VT323', monospace; font-weight:700;
+    border:2px solid var(--pink); border-radius:50%;
+    background:var(--card); color:var(--ink); display:flex; align-items:center; justify-content:center;
+    text-align:center; box-shadow:5px 5px 0 var(--purple);
+    animation: float 6s ease-in-out infinite;
+  }
+  .s1{width:120px; height:120px; top:8%; right:8%; background:var(--purple); font-size:1rem; transform:rotate(8deg);}
+  .s2{width:90px; height:90px; bottom:5%; right:22%; background:var(--card); animation-delay:1.5s;}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-18px) rotate(6deg);}}
+
+  .photo-frame{
+    position:absolute; top:6vh; right:6vw; width:240px; height:300px;
+    border:4px solid var(--pink); border-radius:18px; overflow:hidden;
+    box-shadow:10px 10px 0 var(--purple); transform:rotate(3deg);
+    z-index:2; background:var(--card);
+  }
+  .photo-frame img{width:100%; height:100%; object-fit:cover; display:block;}
+  .photo-tag{
+    position:absolute; bottom:-14px; left:-14px; background:var(--pink); color:#0a0a0a;
+    font-family:'VT323', monospace; font-size:1rem; padding:6px 14px;
+    border:2px solid var(--ink); border-radius:8px; transform:rotate(-4deg);
+  }
+  @media(max-width:800px){
+    .photo-frame{position:relative; margin:0 auto 30px; right:auto; top:auto; transform:rotate(0);}
+  }
+
+  /* === SECTION HEADERS === */
+  .section{padding:80px 6vw;}
+  .section-head{
+    font-family:'Orbitron', sans-serif; font-weight:900;
+    font-size:clamp(1.8rem, 5vw, 3.2rem); text-transform:uppercase;
+    margin-bottom:40px; display:flex; align-items:center; gap:16px;
+  }
+  .section-head::before{
+    content:''; display:block; width:24px; height:24px;
+    background:var(--pink); border:2px solid var(--ink); border-radius:50%;
+  }
+
+  /* === ABOUT === */
+  .about-grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:40px;}
+  @media(max-width:800px){.about-grid{grid-template-columns:1fr;}}
+  .about-card, .info-card{
+    background:var(--card); border:3px solid var(--pink); border-radius:18px;
+    padding:30px; box-shadow:8px 8px 0 var(--purple);
+  }
+  .about-card p{line-height:1.8; font-size:1.02rem; color:#e8d0d4;}
+  .info-card h3{font-family:'Orbitron'; margin-bottom:14px; font-size:1.1rem; color:var(--pink);}
+  .info-card ul{list-style:none; font-family:'VT323', monospace; font-size:1.1rem; line-height:2;}
+  .info-card li::before{content:'>> '; color:var(--pink); font-weight:bold;}
+
+  /* === TIMELINE / EXPERIENCE === */
+  .timeline{position:relative; padding-left:40px; border-left:4px dashed var(--purple);}
+  .tl-item{
+    position:relative; margin-bottom:36px; background:var(--card);
+    border:3px solid var(--pink); border-radius:14px;
+    padding:22px 26px; box-shadow:6px 6px 0 var(--purple);
+  }
+  .tl-item::before{
+    content:''; position:absolute; left:-49px; top:24px;
+    width:18px; height:18px; background:var(--pink);
+    border:3px solid var(--purple); border-radius:50%;
+  }
+  .tl-item h3{font-family:'Orbitron'; font-size:1.1rem; margin-bottom:4px; color:var(--ink);}
+  .tl-date{
+    font-family:'VT323', monospace; font-size:1rem; color:var(--bg);
+    background:var(--pink); display:inline-block; padding:2px 10px; border-radius:6px;
+    margin-bottom:10px;
+  }
+  .tl-item p, .tl-item li{font-size:.92rem; line-height:1.6; color:#d9b8c0;}
+  .tl-item ul{margin-top:8px; padding-left:20px;}
+
+  /* === SKILLS === */
+  .skills-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:24px;}
+  .skill-card{
+    background:linear-gradient(160deg, var(--card), #0a0a0a);
+    border:3px solid var(--pink); border-radius:16px; padding:24px;
+    box-shadow:6px 6px 0 var(--purple); transition:transform .2s;
+  }
+  .skill-card:hover{transform:rotate(-1deg) scale(1.02);}
+  .skill-card h3{font-family:'Orbitron'; font-size:1rem; margin-bottom:12px; color:var(--cyan); text-transform:uppercase;}
+  .skill-card p{font-size:.92rem; line-height:1.7; color:#d9b8c0;}
+  .pill-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;}
+  .pill{
+    font-family:'VT323', monospace; font-size:.95rem; padding:4px 12px;
+    background:var(--pink); color:var(--bg); border:2px solid var(--purple); border-radius:999px;
+  }
+
+  /* === EDUCATION/ORG === */
+  .edu-row{display:flex; gap:24px; flex-wrap:wrap;}
+  .edu-card{
+    flex:1; min-width:240px; background:var(--card); border:3px solid var(--pink);
+    border-radius:16px; padding:24px; box-shadow:6px 6px 0 var(--purple);
+  }
+  .edu-card h3{font-family:'Orbitron'; font-size:1rem; margin-bottom:6px; color:var(--ink);}
+  .edu-card .tl-date{margin-bottom:10px;}
+  .edu-card ul{padding-left:20px; font-size:.9rem; line-height:1.6; color:#d9b8c0;}
+  .edu-card p{color:#d9b8c0; font-size:.92rem;}
+
+  /* === FOOTER / CONTACT === */
+  footer{
+    background:#000; color:var(--ink); padding:60px 6vw 30px;
+    border-top:6px solid var(--pink);
+  }
+  footer h2{
+    font-family:'Orbitron'; font-size:clamp(2rem,6vw,4rem); text-transform:uppercase;
+    background:linear-gradient(135deg, var(--pink), var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .contact-row{display:flex; gap:30px; flex-wrap:wrap; margin-top:24px; font-family:'VT323', monospace; font-size:1.2rem;}
+  .contact-row a{color:var(--cyan); text-decoration:none;}
+  .contact-row a:hover{color:var(--pink);}
+  .foot-bottom{
+    margin-top:50px; font-family:'VT323', monospace; font-size:.9rem;
+    opacity:.6; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">ROLAN<span>TIRO</span>.RMIK</div>
+  <ul>
+    <li><a href="#about">Profil</a></li>
+    <li><a href="#experience">Pengalaman</a></li>
+    <li><a href="#skills">Skill</a></li>
+    <li><a href="#edu">Edukasi</a></li>
+    <li><a href="#contact">Kontak</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="photo-frame">
+    <img src="profile.jpg" alt="Foto M. Rolantiro Al Faqih">
+    <div class="photo-tag">it's me!</div>
+  </div>
+  <div class="sticker s2" style="left:6%; bottom:8%; top:auto; right:auto;">EST. 2026</div>
+  <div class="marquee">★ ICD-10 ★ ICD-9-CM ★ RME / RKE ★ QGIS ★ STATUS: FRESH GRADUATE ★</div>
+  <h1>M. Rolantiro<br>Al Faqih</h1>
+  <h2>Ahli Madya Rekam Medis &amp; Informasi Kesehatan</h2>
+  <p class="tag">Lulusan D3 RMIK Universitas Esa Unggul. Jago ngubek-ngubek berkas rekam medis, kodefikasi ICD, audit data kesehatan, sampai analisis spasial pakai QGIS. Detail-oriented, kolaboratif, dan totally trustworthy soal kerahasiaan data pasien 🔒💾</p>
+  <div class="badge-row">
+    <div class="badge">📍 Jakarta Barat, DKI Jakarta</div>
+    <div class="badge">📞 0851-3618-5874</div>
+    <div class="badge">✉ rlntro20@gmail.com</div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="section-head">Profil.exe</div>
+  <div class="about-grid">
+    <div class="about-card">
+      <p>Lulusan D3 Rekam Medis dan Informasi Kesehatan Universitas Esa Unggul dengan pengalaman praktik kerja lapangan di berbagai fasilitas kesehatan, mulai dari rumah sakit besar sampai puskesmas. Punya kemampuan mengelola rekam medis manual maupun elektronik, melakukan pengkodean penyakit dan tindakan berdasarkan ICD-10 &amp; ICD-9-CM, serta audit dan analisis data kesehatan.</p>
+      <br>
+      <p>Terbiasa pakai Sistem Informasi Rumah Sakit (SIRS), RME/RKE, serta aplikasi pendukung seperti QGIS dan Microsoft Office. Adaptif, kolaboratif, dan berkomitmen tinggi menjaga kualitas serta kerahasiaan data kesehatan pasien.</p>
+    </div>
+    <div class="info-card">
+      <h3>// QUICK INFO</h3>
+      <ul>
+        <li>IPK: 3.48 / 4.00</li>
+        <li>KTI: Analisis Spasial Faktor Risiko Sebaran TB Puskesmas Medan Satria</li>
+        <li>Software: Ms Word, Ms Excel, QGIS</li>
+        <li>Standar: ICD-10 & ICD-9-CM</li>
+        <li>Domisili: Jakarta Barat</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="experience">
+  <div class="section-head">Log Pengalaman PKL</div>
+  <div class="timeline">
+
+    <div class="tl-item">
+      <span class="tl-date">04–15 SEP 2023</span>
+      <h3>RSUD Koja, Jakarta Utara — Pengelolaan Rekam Medis</h3>
+      <ul>
+        <li>Assembling dokumen rekam medis sesuai standar kelengkapan & urutan.</li>
+        <li>Pengkodean diagnosis & tindakan medis sesuai ICD-10 dan ICD-9-CM.</li>
+        <li>Mengelola dokumen di unit filing agar rapi dan mudah diakses.</li>
+        <li>Input data administrasi pasien IGD, rawat jalan & rawat inap ke SIRS.</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <span class="tl-date">12–23 FEB 2023</span>
+      <h3>RS Islam Jakarta Sukapura — Manajemen RM Hybrid & Statistik</h3>
+      <ul>
+        <li>Penataan & penyimpanan berkas RM sesuai sistem penjajaran.</li>
+        <li>Assembling dokumen rekam medis.</li>
+        <li>Alih media — scan BRM fisik ke format digital.</li>
+        <li>Input kode diagnosis & tindakan ke sistem.</li>
+        <li>Seleksi BRM berdasarkan nilai guna (administratif, hukum, edukasi, riset).</li>
+        <li>Rekapitulasi data kunjungan & analisis statistik pelayanan.</li>
+        <li>Proyeksi kebutuhan informasi via analisis data origin.</li>
+        <li>Kajian SWOT sistem pengelolaan rekam medis.</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <span class="tl-date">05–16 AGU 2024</span>
+      <h3>Puskesmas Medan Satria, Bekasi</h3>
+      <ul>
+        <li>Pemetaan data wilayah & kebutuhan layanan kesehatan via SIG (QGIS).</li>
+        <li>Menyusun rencana kegiatan unit kerja.</li>
+        <li>Penjaminan mutu pelayanan kesehatan.</li>
+        <li>Audit pendokumentasian klinis.</li>
+        <li>Klasifikasi & kodefikasi penyakit genitourinari, reproduksi, perinatal, kongenital sesuai ICD.</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <span class="tl-date">03–21 MAR 2025</span>
+      <h3>RS Sint Carolus, Jakarta Pusat</h3>
+      <ul>
+        <li>Pencatatan & pengelolaan data pasien via Rekam Kesehatan Elektronik (RKE).</li>
+        <li>Analisis alur & kebutuhan data sistem informasi kesehatan.</li>
+        <li>Audit rekam medis untuk kelengkapan & kepatuhan dokumen.</li>
+        <li>Pemahaman pembiayaan kesehatan: klaim layanan & INA-CBG's.</li>
+        <li>Reseleksi kode morbiditas & mortalitas sesuai ICD-10.</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <span class="tl-date">01 OKT – 31 DES 2025</span>
+      <h3>TKS Puskesmas Kotabumi Udik, Lampung Utara</h3>
+      <ul>
+        <li>Penggunaan Aplikasi Rekam Medis Elektronik (RME).</li>
+        <li>Menjaga anjungan mandiri pasien.</li>
+        <li>Menjaga loket pendaftaran pasien.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="skills">
+  <div class="section-head">Skill Tree</div>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <h3>💾 Hard Skills</h3>
+      <p>Analisis & pengolahan data statistik kesehatan, audit kelengkapan rekam medis, kodefikasi ICD-10 & ICD-9-CM, RME, serta pemahaman proses pendaftaran pasien rumah sakit.</p>
+      <div class="pill-row">
+        <span class="pill">ICD-10</span>
+        <span class="pill">ICD-9-CM</span>
+        <span class="pill">RME/RKE</span>
+        <span class="pill">Audit RM</span>
+        <span class="pill">Statistik Kesehatan</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h3>🛠 Software</h3>
+      <p>Familiar dengan tools sehari-hari di unit rekam medis dan analisis spasial untuk pemetaan kebutuhan layanan kesehatan.</p>
+      <div class="pill-row">
+        <span class="pill">MS Word</span>
+        <span class="pill">MS Excel</span>
+        <span class="pill">QGIS</span>
+        <span class="pill">SIRS</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h3>✨ Soft Skills</h3>
+      <p>Kolaborator tim yang solid, adaptif terhadap perubahan mendadak, manajemen waktu rapi, problem solver dengan pendekatan akar masalah, jujur dan tanggung jawab tinggi.</p>
+      <div class="pill-row">
+        <span class="pill">Teamwork</span>
+        <span class="pill">Adaptif</span>
+        <span class="pill">Time Management</span>
+        <span class="pill">Problem Solving</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="edu">
+  <div class="section-head">Edukasi & Kepanitiaan</div>
+  <div class="edu-row">
+    <div class="edu-card">
+      <span class="tl-date">2022 – 2025</span>
+      <h3>Universitas Esa Unggul</h3>
+      <p>D3 Rekam Medis dan Informasi Kesehatan, Semester 6</p>
+      <ul>
+        <li>KTI: Analisis Spasial Faktor Risiko Sebaran TB di UPTD Puskesmas Medan Satria</li>
+        <li>IPK: 3.48 / 4.00</li>
+      </ul>
+    </div>
+    <div class="edu-card">
+      <span class="tl-date">2019 – 2022</span>
+      <h3>SMAN 1 Kotabumi</h3>
+      <p>Pendidikan Menengah Atas</p>
+    </div>
+    <div class="edu-card">
+      <span class="tl-date">2026</span>
+      <h3>Skyland Festival</h3>
+      <ul>
+        <li>Sekretaris</li>
+        <li>Koordinator Kesehatan</li>
+        <li>LO Perunggu</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <h2>Let's Connect!</h2>
+  <p style="margin-top:14px; max-width:500px;">Terbuka untuk peluang kerja di bidang rekam medis, informasi kesehatan, atau administrasi fasilitas kesehatan. Hubungi aku via:</p>
+  <div class="contact-row">
+    <a href="mailto:rlntro20@gmail.com">✉ rlntro20@gmail.com</a>
+    <a href="tel:085136185874">📞 0851-3618-5874</a>
+    <span>📍 Jakarta Barat, DKI Jakarta</span>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 M. Rolantiro Al Faqih</span>
+    <span>made with ♥ and a lot of ICD codes</span>
+  </div>
+</footer>
+
+</body>
+</html>

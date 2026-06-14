@@ -190,7 +190,37 @@
     background:var(--pink); color:var(--bg); border:2px solid var(--purple); border-radius:999px;
   }
 
-  /* === EDUCATION/ORG === */
+  /* === PROJECTS === */
+  .projects-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:28px;}
+  .project-card{
+    background:var(--card); border:3px solid var(--pink); border-radius:18px;
+    padding:28px; box-shadow:8px 8px 0 var(--purple);
+    display:flex; flex-direction:column; gap:14px;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .project-card:hover{transform:translate(-4px,-4px); box-shadow:12px 12px 0 var(--purple);}
+  .project-num{
+    font-family:'VT323', monospace; font-size:3.5rem; line-height:1;
+    color:var(--purple); opacity:.5;
+  }
+  .project-card h3{font-family:'Orbitron'; font-size:1.05rem; color:var(--pink);}
+  .project-card p{font-size:.92rem; line-height:1.7; color:#d9b8c0; flex:1;}
+  .project-link{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'VT323', monospace; font-size:1.1rem;
+    background:var(--pink); color:var(--bg);
+    border:2px solid var(--purple); border-radius:8px;
+    padding:8px 18px; text-decoration:none; width:fit-content;
+    transition:background .2s, color .2s;
+  }
+  .project-link:hover{background:var(--purple); color:var(--ink);}
+  .project-tag{
+    display:flex; gap:8px; flex-wrap:wrap;
+  }
+  .project-tag span{
+    font-family:'VT323',monospace; font-size:.9rem;
+    border:2px solid var(--pink); border-radius:6px; padding:2px 10px; color:var(--pink);
+  }
   .edu-row{display:flex; gap:24px; flex-wrap:wrap;}
   .edu-card{
     flex:1; min-width:240px; background:var(--card); border:3px solid var(--pink);
@@ -223,11 +253,12 @@
 <body>
 
 <nav>
-  <div class="logo">M. ROLANTIRO<span>AL-FAQIH</span>,A.Md.RMIK</div>
+  <div class="logo">M. ROLANTIRO<span>AL FAQIH</span>,A.Md.RMIK</div>
   <ul>
     <li><a href="#about">Profil</a></li>
     <li><a href="#experience">Pengalaman</a></li>
     <li><a href="#skills">Skill</a></li>
+    <li><a href="#projects">Projects</a></li>
     <li><a href="#edu">Edukasi</a></li>
     <li><a href="#contact">Kontak</a></li>
   </ul>
@@ -236,9 +267,7 @@
 <section class="hero">
   <div class="photo-frame">
     <img src="profile.jpg" alt="Foto M. Rolantiro Al Faqih">
-    <div class="photo-tag">it's me!</div>
   </div>
-  <div class="sticker s2" style="left:6%; bottom:8%; top:auto; right:auto;">EST. 2026</div>
   <div class="marquee">★ ICD-10 ★ ICD-9-CM ★ RME / RKE ★ QGIS ★ STATUS: FRESH GRADUATE ★</div>
   <h1>M. Rolantiro<br>Al Faqih</h1>
   <h2>Ahli Madya Rekam Medis &amp; Informasi Kesehatan</h2>
@@ -251,7 +280,7 @@
 </section>
 
 <section class="section" id="about">
-  <div class="section-head">Profil.exe</div>
+  <div class="section-head">Profil</div>
   <div class="about-grid">
     <div class="about-card">
       <p>Lulusan D3 Rekam Medis dan Informasi Kesehatan Universitas Esa Unggul dengan pengalaman praktik kerja lapangan di berbagai fasilitas kesehatan, mulai dari rumah sakit besar sampai puskesmas. Punya kemampuan mengelola rekam medis manual maupun elektronik, melakukan pengkodean penyakit dan tindakan berdasarkan ICD-10 &amp; ICD-9-CM, serta audit dan analisis data kesehatan.</p>
@@ -372,6 +401,37 @@
         <span class="pill">Problem Solving</span>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="section" id="projects">
+  <div class="section-head">Projects.zip</div>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-num">01</div>
+      <h3>Tuberkulosis Care 0.1</h3>
+      <div class="project-tag">
+        <span>Web App</span><span>Healthcare</span><span>TB</span>
+      </div>
+      <p>Aplikasi web yang membantu mengurangi stigma terhadap pasien TB melalui proses pendaftaran yang lebih privat dan digital. Dilengkapi fitur antrean online, konsultasi dokter, dan monitoring kepatuhan minum OAT untuk meningkatkan efisiensi layanan serta pemantauan pengobatan pasien.</p>
+      <a class="project-link" href="https://rolantiro.github.io/Projectrolan/Tuberkulosis%20Care%200.1.html" target="_blank">
+        🔗 Lihat Website
+      </a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">02</div>
+      <h3>ICD Navigator</h3>
+      <div class="project-tag">
+        <span>Web App</span><span>ICD-10</span><span>ICD-9-CM</span>
+      </div>
+      <p>Mesin pencari ICD-10 dan ICD-9 berbasis web yang mengintegrasikan kode diagnosis dan tindakan medis dalam satu platform. Dirancang untuk mengurangi kesalahan pengkodean, mempercepat proses pencarian, serta mendukung tenaga kesehatan dan pelajar melalui fitur pencarian cerdas dan referensi prosedur terkait.</p>
+      <a class="project-link" href="https://rolantiro.github.io/Projectrolan/icd_navigator.html" target="_blank">
+        🔗 Lihat Website
+      </a>
+    </div>
+
   </div>
 </section>
 

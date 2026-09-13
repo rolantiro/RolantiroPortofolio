@@ -477,5 +477,70 @@
   </div>
 </footer>
 
+<p style="text-align:center;padding:30px 0 40px;font-family:'VT323',monospace;font-size:.85rem;opacity:.35;">
+  <span id="editBtn" style="cursor:pointer;">edit</span>
+</p>
+
+<script>
+// ponytail: proteksi hanya di sisi browser (client-side), siapa pun yang lihat source
+// bisa baca kredensialnya. Cukup untuk mencegah pengunjung iseng, BUKAN keamanan
+// sungguhan. Tombol sengaja ditaruh polos & di paling bawah biar gak kepencet gak sengaja.
+// Kalau butuh keamanan asli, pindah ke backend + auth server.
+(function(){
+  var USER = 'rolantiro', PASS = '21R';
+  var REPEATABLE = ['.timeline', '.skills-grid', '.projects-grid', '.edu-row'];
+  var btn = document.getElementById('editBtn');
+  var saved = localStorage.getItem('portfolio_html');
+  if (saved) document.documentElement.replaceChild(
+    new DOMParser().parseFromString(saved, 'text/html').body,
+    document.body
+  );
+
+  function addPlusButtons(){
+    REPEATABLE.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(container){
+        if (container.querySelector(':scope > .add-item-btn')) return;
+        var plus = document.createElement('button');
+        plus.className = 'add-item-btn';
+        plus.contentEditable = false;
+        plus.textContent = '+ Tambah Item';
+        plus.style.cssText = "font-family:'VT323',monospace;font-size:1rem;background:transparent;color:var(--pink);border:2px dashed var(--pink);border-radius:10px;padding:10px 16px;cursor:pointer;width:100%;";
+        plus.onclick = function(){
+          var items = container.querySelectorAll(':scope > *:not(.add-item-btn)');
+          var last = items[items.length - 1];
+          if (last) container.insertBefore(last.cloneNode(true), plus);
+        };
+        container.appendChild(plus);
+      });
+    });
+  }
+  function removePlusButtons(){
+    document.querySelectorAll('.add-item-btn').forEach(function(b){ b.remove(); });
+  }
+
+  btn.onclick = function(){
+    if (document.body.isContentEditable) {
+      removePlusButtons();
+      document.body.contentEditable = false;
+      localStorage.setItem('portfolio_html', document.body.innerHTML);
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([document.documentElement.outerHTML], {type:'text/html'}));
+      a.download = 'portfolio.html';
+      a.click();
+      btn.textContent = 'edit';
+      alert('Perubahan tersimpan di browser ini. File portfolio.html juga sudah diunduh — upload ulang file itu ke hosting kamu (mis. GitHub Pages) supaya perubahan tampil untuk semua orang.');
+    } else {
+      var u = prompt('Username:');
+      if (u !== USER) { if (u !== null) alert('Username salah'); return; }
+      var p = prompt('Password:');
+      if (p !== PASS) { if (p !== null) alert('Password salah'); return; }
+      document.body.contentEditable = true;
+      addPlusButtons();
+      btn.textContent = 'simpan & unduh';
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
